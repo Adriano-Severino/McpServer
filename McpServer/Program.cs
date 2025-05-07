@@ -35,3 +35,4 @@ builder.Services.AddHttpClient<ApiClient>(client =>
 });
 
 var app = builder.Build();
+await app.RunAsync();
