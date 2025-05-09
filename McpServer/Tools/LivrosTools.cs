@@ -10,7 +10,7 @@ namespace McpServer.Tools
     public static class LivrosTools
     {
         [McpServerTool, Description("Buscar os livros da livraria, definindo um filtro opcional por titulo")]
-        public static async Task<string> ObterAsync(ApiClient apiClient, [Description("Filtra opcional pelo titulo do livro")] string titulo)
+        public static async Task<string> ObterAsync(ApiClient apiClient, [Description("Filtra opcional pelo titulo do livro")] string? titulo = null)
         {
             try
             {
@@ -20,6 +20,22 @@ namespace McpServer.Tools
                     : JsonSerializer.Serialize(livros);
             }
             catch(Exception ex)
+            {
+                return $"Erro ao buscar livros: {ex.Message}";
+            }
+        }
+
+        [McpServerTool, Description("Buscar os livros da livraria, definindo um filtro opcional por autor")]
+        public static async Task<string> ObterPorAutor(ApiClient apiClient, [Description("Filtra opcional pelo autor do livro")] string autor)
+        {
+            try
+            {
+                var livros = await apiClient.ObterPorAutorAsync(autor);
+                return livros.Count == 0
+                    ? "Nenhum livro encontrado"
+                    : JsonSerializer.Serialize(livros);
+            }
+            catch (Exception ex)
             {
                 return $"Erro ao buscar livros: {ex.Message}";
             }

@@ -1,6 +1,6 @@
-﻿namespace McpServer.DTOs
+﻿namespace Livros.Models
 {
-    public class LivroResponse
+    public class LivrosResponse
     {
         public int Id { get; set; }
         public string Titulo { get; set; }

@@ -25,13 +25,19 @@ builder.Services
     .WithStdioServerTransport()
     .WithToolsFromAssembly();
 
+
+builder.Services.AddHttpClient<OllamaClient>(client =>
+{
+    client.BaseAddress = new Uri("http://localhost:11434");
+});
+
 builder.Services.AddHttpClient<ApiClient>(client =>
 {
     var baseAddress = Environment.GetEnvironmentVariable("API_BASE_ADDRESS");
     if (!string.IsNullOrEmpty(baseAddress))
         client.BaseAddress = new Uri(baseAddress);
-    else;
-    client.BaseAddress = new Uri("https://localhost:7294/api/");
+    else
+        client.BaseAddress = new Uri("https://host.docker.internal:7294/api/");
 });
 
 var app = builder.Build();
