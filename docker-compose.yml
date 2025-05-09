@@ -3,7 +3,7 @@ services:
   mcpserver:
     build:
       context: .
-      dockerfile: Dockerfile.mcpserver
+      dockerfile: Dockerfile
     environment:
       - OLLAMA_BASE_URL=http://ollama:11434
       - API_BASE_ADDRESS=http://livros-api:5000/api/
