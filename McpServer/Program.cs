@@ -1,4 +1,4 @@
-﻿using McpServer.Client;
+using McpServer.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,7 +28,10 @@ builder.Services
 
 builder.Services.AddHttpClient<OllamaClient>(client =>
 {
-    client.BaseAddress = new Uri("http://localhost:11434");
+    // Possibilita acessar o Ollama tanto localmente quanto via Docker
+    var ollamaAddress = Environment.GetEnvironmentVariable("OLLAMA_BASE_URL") 
+        ?? "http://host.docker.internal:11434";
+    client.BaseAddress = new Uri(ollamaAddress);
 });
 
 builder.Services.AddHttpClient<ApiClient>(client =>
@@ -37,7 +40,22 @@ builder.Services.AddHttpClient<ApiClient>(client =>
     if (!string.IsNullOrEmpty(baseAddress))
         client.BaseAddress = new Uri(baseAddress);
     else
-        client.BaseAddress = new Uri("https://host.docker.internal:7294/api/");
+    {
+        // Tenta primeiro com HTTPS na porta 7294
+        try
+        {
+            var testClient = new HttpClient();
+            var response = testClient.GetAsync("https://host.docker.internal:7294/api/v1/Livros").Result;
+            client.BaseAddress = new Uri("https://host.docker.internal:7294/api/");
+            Console.WriteLine("Conectado à API Livros via HTTPS");
+        }
+        catch
+        {
+            // Fallback para HTTP na porta 5000 ou 5001
+            client.BaseAddress = new Uri("http://host.docker.internal:5000/api/");
+            Console.WriteLine("Conectado à API Livros via HTTP");
+        }
+    }
 });
 
 var app = builder.Build();

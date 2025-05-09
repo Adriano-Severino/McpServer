@@ -1,0 +1,65 @@
+services:
+  # MCP Server
+  mcpserver:
+    build:
+      context: .
+      dockerfile: Dockerfile.mcpserver
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - API_BASE_ADDRESS=http://livros-api:5000/api/
+    ports:
+      - "5500:5500"  # Porta para o MCP Server
+    networks:
+      - app-network
+    depends_on:
+      - ollama
+      - livros-api
+
+  # API de Livros
+  livros-api:
+    build:
+      context: ./Livros
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+
+  # Ollama
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    networks:
+      - app-network
+
+  # Open WebUI (Já existente no ambiente do usuário)
+  # Incluído apenas para referência
+  # open-webui:
+  #   image: ghcr.io/open-webui/open-webui:cuda
+  #   ports:
+  #     - "3000:8080"
+  #   environment:
+  #     - OLLAMA_BASE_URL=http://ollama:11434
+  #     - MCP_SERVER_URL=http://mcpserver:5500
+  #   volumes:
+  #     - open-webui-data:/app/backend/data
+  #   depends_on:
+  #     - ollama
+  #   networks:
+  #     - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  ollama_data:
+    driver: local
+  open-webui-data:
+    driver: local

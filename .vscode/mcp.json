@@ -1,0 +1,27 @@
+{
+    "servers": {
+        "dotnet-mcpserver-local": {
+            "type": "stdio",
+            "command": "dotnet",
+            "args": [
+                "run",
+                "--project",
+                "C:\\Users\\Adria\\source\\repos\\McpServer\\McpServer\\McpServer.csproj",
+            ]
+        },
+    
+       // "dotnet-mcpserver-docker": {
+           // "type": "stdio",
+            //"command": "docker",
+           // "args": [
+               // "run",
+               // "-i",
+               // "--rm",
+               // "-e",
+                //"API_BASE_ADDRESS=https://host.docker.internal:7294/api/",
+                //"adriano/dotnet-mcpserver"
+            //],
+            //"env":{}
+        //}
+    }
+}
