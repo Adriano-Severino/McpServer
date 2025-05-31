@@ -38,21 +38,22 @@ services:
     networks:
       - app-network
 
-  # Open WebUI (Já existente no ambiente do usuário)
-  # Incluído apenas para referência
-  # open-webui:
-  #   image: ghcr.io/open-webui/open-webui:cuda
-  #   ports:
-  #     - "3000:8080"
-  #   environment:
-  #     - OLLAMA_BASE_URL=http://ollama:11434
-  #     - MCP_SERVER_URL=http://mcpserver:5500
-  #   volumes:
-  #     - open-webui-data:/app/backend/data
-  #   depends_on:
-  #     - ollama
-  #   networks:
-  #     - app-network
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:cuda
+    ports:
+      - "3000:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - MCP_SERVER_URL=http://mcpserver:5500
+      - OLLAMA_LOCAL_URL=http://192.168.15.8:11434
+
+
+    volumes:
+      - open-webui-data:/app/backend/data
+    depends_on:
+      - ollama
+    networks:
+      - app-network
 
 networks:
   app-network:

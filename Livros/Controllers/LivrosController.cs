@@ -2,7 +2,6 @@
 using Livros.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
-using System.Threading.Tasks;
 
 namespace Livros.Controllers
 {
