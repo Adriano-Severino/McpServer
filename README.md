@@ -24,7 +24,7 @@ O sistema é composto por três componentes principais:
 
 1. Clone o repositório:
    ```
-   git clone <url-do-repositorio>
+   git clone https://github.com/Adriano-Severino/McpServer.git
    cd McpServer
    ```
 
@@ -42,7 +42,7 @@ O sistema é composto por três componentes principais:
 
 1. Clone o repositório:
    ```
-   git clone <url-do-repositorio>
+   git clone https://github.com/Adriano-Severino/McpServer.git
    cd McpServer
    ```
 
