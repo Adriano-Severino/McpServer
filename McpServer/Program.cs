@@ -25,7 +25,6 @@ builder.Services
     .WithStdioServerTransport()
     .WithToolsFromAssembly();
 
-
 builder.Services.AddHttpClient<OllamaClient>(client =>
 {
     // Possibilita acessar o Ollama tanto localmente quanto via Docker
@@ -45,18 +44,27 @@ builder.Services.AddHttpClient<ApiClient>(client =>
         try
         {
             var testClient = new HttpClient();
-            var response = testClient.GetAsync("https://host.docker.internal:7294/api/v1/Livros").Result;
-            client.BaseAddress = new Uri("https://host.docker.internal:7294/api/");
+            var response = testClient.GetAsync("https://mcpserver-livros-api-1/api/v1/Livros").Result;
+            client.BaseAddress = new Uri("https://mcpserver-livros-api-1:7294/api/");
             Console.WriteLine("Conectado à API Livros via HTTPS");
         }
         catch
         {
             // Fallback para HTTP na porta 5000 ou 5001
-            client.BaseAddress = new Uri("http://host.docker.internal:5000/api/");
+            client.BaseAddress = new Uri("http://mcpserver-livros-api-1:5000/api/");
             Console.WriteLine("Conectado à API Livros via HTTP");
         }
     }
 });
 
 var app = builder.Build();
+
+// Inicia o servidor HTTP na porta 5500
+var serviceProvider = app.Services;
+McpServer.Transport.HttpServerExtension.StartHttpServer(serviceProvider);
+Console.WriteLine("------------------------------------------------------------------------------");
+Console.WriteLine("Servidor HTTP iniciado na porta 5500");
+Console.WriteLine("URL para conectar ao Open WebUI: http://host.docker.internal:5500/api/openapi.json");
+Console.WriteLine("------------------------------------------------------------------------------");
+
 await app.RunAsync();
